@@ -14,6 +14,7 @@ const ModalConfirm = (props) => {
         if (res && res.statusCode === 204) {
             //success
             toast.success("Delete Success!");
+
             handleClose();
             handleDeleteUserFromModal(dataDeleteUser)
         }
