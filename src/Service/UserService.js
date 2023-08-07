@@ -1,28 +1,23 @@
-import axios from "./customizeAxios"
-
+import axios from "./customizeAxios";
 
 const fetchAllUsers = (page) => {
-    return (
-        axios.get(`/api/users?page=${page}`)
-    )
-}
+    return axios.get(`/api/users?page=${page}`);
+};
 
 const fetchAddNewUser = (name, job) => {
-    return (
-        axios.post("/api/users", { name, job })
-    )
-}
+    return axios.post("/api/users", { name, job });
+};
 
 const putUpdateUser = (name, job) => {
-    return (
-        axios.put("/api/users/2", { name, job })
-    )
-}
+    return axios.put("/api/users/2", { name, job });
+};
 
 const deleteUser = (id) => {
-    return (
-        axios.delete(`/api/users/2${id}`)
-    )
-}
+    return axios.delete(`/api/users/2${id}`);
+};
 
-export { fetchAllUsers, fetchAddNewUser, putUpdateUser, deleteUser } 
+const loginApi = (email, password) => {
+    return axios.post("/api/login", { email, password });
+};
+
+export { fetchAllUsers, fetchAddNewUser, putUpdateUser, deleteUser, loginApi };
