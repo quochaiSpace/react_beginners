@@ -1,28 +1,24 @@
 import "./App.scss";
 import Header from "./component/Header";
-import TableUsers from "./component/TableUsers";
 import Container from "react-bootstrap/Container";
-import Home from "./component/Home";
-import Login from "./component/Login";
 import { ToastContainer, toast } from "react-toastify";
-import { Routes, Route, Link } from "react-router-dom";
-import { useContext, useEffect } from "react";
-import { UserContext } from "./context/UserContext";
+
+import { useEffect } from "react";
+
 import AppRoutes from "./routes/AppRoutes";
 
-function App() {
-  const { user, loginContext } = useContext(UserContext);
+import { handleRefresh } from "./redux/actions/userAction";
+import { useDispatch } from "react-redux";
 
-  console.log(">>>>user: ", user);
+function App() {
+  const dispatch = useDispatch();
+
 
   useEffect(() => {
-    if (localStorage.getItem("token")) {
-      loginContext(
-        localStorage.getItem("email"),
-        localStorage.getItem("token")
-      );
+    if (localStorage.getItem("email")) {
+      dispatch(handleRefresh());
     }
-  });
+  }, []);
 
   return (
     <>

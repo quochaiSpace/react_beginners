@@ -5,20 +5,33 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 
 import { NavLink, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
-import { useContext } from "react";
-import { UserContext } from "../context/UserContext";
+import { handleLogoutRedux } from "../redux/actions/userAction";
+
+import { useEffect } from "react";
+
+
 
 const Header = (props) => {
-    const { logout, user } = useContext(UserContext);
 
     const navigate = useNavigate();
 
+    const dispatch = useDispatch();
+
+
+    const user = useSelector(state => state.user.account)
+
     const handleLogout = () => {
-        logout();
-        navigate("/");
-        toast.success("Log out Success");
+        dispatch(handleLogoutRedux());
     };
+
+    useEffect(() => {
+        if (user && user.auth === false) {
+            navigate("/");
+            toast.success("Log out Success");
+        }
+    }, [user]);
 
     return (
         <Navbar bg="light" expand="lg">

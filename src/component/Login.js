@@ -1,24 +1,28 @@
 import { useState } from "react";
 
-import { loginApi } from "../Service/UserService";
 import { toast } from "react-toastify";
 
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-import { useContext } from "react";
-import { UserContext } from "../context/UserContext";
+import { handleLoginRedux } from "../redux/actions/userAction";
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [hidePassword, setHidePassword] = useState(false);
 
-    const [loadingAPI, setLodingAPI] = useState(false);
+
+
+    const isLoading = useSelector(state => state.user.isLoading);
+    const account = useSelector(state => state.user.account)
 
     const navigate = useNavigate();
 
-    const { loginContext } = useContext(UserContext);
+    const dispatch = useDispatch();
+
+
 
     // useEffect(() => {
     //   let token = localStorage.getItem("token");
@@ -32,19 +36,26 @@ const Login = () => {
             toast.error("Email & Password is required");
             return;
         }
+        dispatch(handleLoginRedux(email, password))
 
-        setLodingAPI(true);
-        let res = await loginApi(email.trim(), password);
-        if (res && res.token) {
-            loginContext(email, res.token);
-            navigate("/");
-        } else {
-            if (res && res.status === 400) {
-                toast.error(res.data.error);
-            }
-        }
-        setLodingAPI(false);
+
+        // let res = await loginApi(email.trim(), password);
+        // if (res && res.token) {
+        //     loginContext(email, res.token);
+        //     navigate("/");
+        // } else {
+        //     if (res && res.status === 400) {
+        //         toast.error(res.data.error);
+        //     }
+        // }
     };
+
+    useEffect(() => {
+        if (account && account.auth === true) {
+            navigate("/");
+        }
+    }, [account])
+
 
     return (
         <div className="login-container col-12 col-sm-4">
@@ -79,12 +90,12 @@ const Login = () => {
                 className={email && password ? "active" : ""}
                 onClick={() => handleLogin()}
             >
-                {loadingAPI && <i className="fa-solid fa-sync fa-spin"></i>} &nbsp;Login
+                {isLoading && <i className="fa-solid fa-sync fa-spin"></i>} &nbsp;Login
             </button>
 
             <div className="back">Go back</div>
         </div>
     );
-};
 
-export default Login;
+}
+export default Login

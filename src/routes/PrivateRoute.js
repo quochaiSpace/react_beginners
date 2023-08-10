@@ -1,10 +1,11 @@
 import { Routes, Route, Link } from "react-router-dom";
 
-import { useContext, useEffect } from "react";
-import { UserContext } from "../context/UserContext";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+
 
 const PrivateRoute = (props) => {
-    const { user } = useContext(UserContext);
+    const user = useSelector((state) => state.user.account);
 
     if (user && !user.auth) {
         return <>You don't have Login!</>;
